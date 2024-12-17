@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Town and Sea</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .product {
+      display: flex;
+      gap: 20px;
+    }
+    .product img {
+      max-width: 400px;
+      height: auto;
+    }
+    .product-details {
+      max-width: 700px;
+    }
+    .make-offer {
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #offerForm {
+      display: none;
+      margin-top: 10px;
+    }
+    input, textarea {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="product">
+      <img src="https://townandsea.com/wp-content/uploads/2024/11/Antique-Spanish-Colonial-Geometric-Front-Walnut-Cabinet-with-Inlay17-1024x768.jpg" alt="Antique Cabinet">
+      <div class="product-details">
+        <h1>Antique Spanish Colonial Geometric Front Walnut Cabinet</h1>
+        <p>This unique walnut cabinet features intricate geometric patterns and beautiful inlay work. A stunning piece to add to any home.</p>
+        <p><strong>Price:</strong> $5,000</p>
+        <div class="make-offer">
+          <button id="makeOfferBtn">Make an Offer</button>
+          <div id="offerForm">
+            <input type="text" id="buyerName" placeholder="Your Name" required>
+            <input type="email" id="buyerEmail" placeholder="Your Email" required>
+            <input type="number" id="offerPrice" placeholder="Your Offer Price" required>
+            <textarea id="buyerMessage" placeholder="Your Message (optional)"></textarea>
+            <button id="submitOfferBtn">Submit Offer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const makeOfferBtn = document.getElementById("makeOfferBtn");
+    const offerForm = document.getElementById("offerForm");
+    const submitOfferBtn = document.getElementById("submitOfferBtn");
+
+    makeOfferBtn.addEventListener("click", () => {
+      offerForm.style.display = "block";
+    });
+
+    submitOfferBtn.addEventListener("click", async () => {
+      const buyerName = document.getElementById("buyerName").value;
+      const buyerEmail = document.getElementById("buyerEmail").value;
+      const offerPrice = document.getElementById("offerPrice").value;
+      const buyerMessage = document.getElementById("buyerMessage").value;
+
+      if (!buyerName || !buyerEmail || !offerPrice) {
+        alert("Please fill out all required fields.");
+        return;
+      }
+
+      const response = await fetch("/submit-offer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ buyerName, buyerEmail, offerPrice, buyerMessage }),
+      });
+
+      if (response.ok) {
+        alert("Your offer has been sent!");
+        offerForm.style.display = "none";
+      } else {
+        alert("There was an error sending your offer. Please try again.");
+      }
+    });
+  </script>
+</body>
+</html>
